@@ -42,9 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if OS.windows?
       config.vm.synced_folder "./ezpublish", "/var/www/ezpublish", type: "nfs"
   else
-      config.vm.synced_folder "./ezpublish", "/var/www/ezpublish",
-          mount_options: ["noatime,intr,rdirplus"],
-          type: "nfs"
+      config.vm.synced_folder "./ezpublish", "/var/www/ezpublish", id: "v-root", mount_options: ["rw", "tcp", "nolock", "noacl", "async"], type: "nfs", nfs_udp: false
   end
 
   config.vm.boot_timeout = 9000
@@ -70,7 +68,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provisioning/vagrant.yml"
       # output as much as you can, or comment this out for silence
-      ansible.verbose = "vvvv"
+      # ansible.verbose = "vvvv"
       ansible.sudo = true
     end
   end
